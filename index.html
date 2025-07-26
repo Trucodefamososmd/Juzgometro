@@ -6,9 +6,7 @@
   <title>Juzgómetro</title>
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -132,22 +130,10 @@
     }
 
     @media (max-width: 480px) {
-      .titulo-nivel {
-        font-size: 1rem;
-      }
-
-      .dropzone {
-        font-size: 1rem;
-        min-height: 50px;
-      }
-
-      .situacion {
-        font-size: 1.1rem;
-      }
-
-      button {
-        font-size: 1.1rem;
-      }
+      .titulo-nivel { font-size: 1rem; }
+      .dropzone { font-size: 1rem; min-height: 50px; }
+      .situacion { font-size: 1.1rem; }
+      button { font-size: 1.1rem; }
     }
   </style>
 </head>
@@ -155,7 +141,6 @@
 
   <div id="juzgometro">
     <h1>JUZGÓMETRO</h1>
-
     <div class="nivel" style="background:#e53935"><div class="titulo-nivel">ARDERÁS EN EL INFIERNO</div><div class="dropzone"></div></div>
     <div class="nivel" style="background:#fb8c00"><div class="titulo-nivel">A LA GUILLOTINA</div><div class="dropzone"></div></div>
     <div class="nivel" style="background:#fdd835; color:#000"><div class="titulo-nivel">MARCHE PRESO</div><div class="dropzone"></div></div>
@@ -168,14 +153,14 @@
   <div id="contenedor-situaciones"></div>
 
   <div class="botones">
-    <button class="btn-juzgar" onclick="agregarSituacion()">Argentinos... a juzgar</button>
+    <button id="btnAgregar" class="btn-juzgar" onclick="agregarSituacion()">Argentinos... a juzgar</button>
     <button onclick="descargarImagen()">Descargar</button>
     <button onclick="reiniciar()">Reiniciar</button>
     <button onclick="window.location.href='agrega.html'">Agregar situaciones</button>
   </div>
 
   <script>
-    const situaciones = [
+    const todasLasSituaciones = [
       "Gritar en el cine", "Hablar con audios de 5 minutos", "Leer el chat de tu pareja sin permiso",
       "Hacerse el dormido para no ceder el asiento", "Robarse un caramelo del súper",
       "Comerse el último pedazo sin avisar", "Pedir comida y no pagarla", "Spoilear el final de una serie",
@@ -183,11 +168,28 @@
       "Tirar basura por la ventana", "Hacer ghosting"
     ];
 
+    let situaciones = [...todasLasSituaciones];
+
     const situacionesContenedor = document.getElementById('contenedor-situaciones');
     const dropzones = document.querySelectorAll('.dropzone');
 
     function agregarSituacion() {
-      const texto = situaciones[Math.floor(Math.random() * situaciones.length)];
+      if (situaciones.length === 0) {
+        alert("Ya no quedan más situaciones.");
+        return;
+      }
+
+      if (document.querySelector('.situacion')) {
+        alert("Primero tenés que juzgar la situación actual.");
+        return;
+      }
+
+      const btn = document.getElementById('btnAgregar');
+      btn.disabled = true;
+
+      const indice = Math.floor(Math.random() * situaciones.length);
+      const texto = situaciones.splice(indice, 1)[0];
+
       const el = document.createElement('div');
       el.className = 'situacion';
       el.textContent = texto;
@@ -242,6 +244,7 @@
           currentDropzone.textContent = el.textContent;
           currentDropzone.style.outline = "none";
           el.remove();
+          document.getElementById('btnAgregar').disabled = false;
         }
         e.preventDefault();
       }, { passive: false });
@@ -255,6 +258,7 @@
         e.preventDefault();
         const data = e.dataTransfer.getData('text/plain');
         zone.textContent = data;
+        document.getElementById('btnAgregar').disabled = false;
       });
     });
 
@@ -270,6 +274,8 @@
     function reiniciar() {
       document.querySelectorAll(".dropzone").forEach(z => z.innerHTML = '');
       document.querySelectorAll(".situacion").forEach(s => s.remove());
+      situaciones = [...todasLasSituaciones];
+      document.getElementById('btnAgregar').disabled = false;
     }
   </script>
 </body>
