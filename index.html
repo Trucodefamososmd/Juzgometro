@@ -2,9 +2,14 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Juzgómetro</title>
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       padding: 0;
@@ -27,193 +32,121 @@
       z-index: -1;
     }
 
-    /* ESTILOS PARA DESKTOP (pantalla grande) */
     #juzgometro {
       background: #1f4aa3;
       padding: 1rem;
       border-radius: 12px;
-      width: 360px;
-      margin: 2rem auto;
-      box-sizing: border-box;
+      max-width: 400px;
+      margin: 1rem auto;
     }
 
     h1 {
       color: white;
       text-align: center;
+      font-size: 1.5rem;
       margin-bottom: 1rem;
-      font-size: 2rem;
     }
 
     .nivel {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #ccc;
       border-radius: 8px;
-      padding: 10px 12px;
+      padding: 10px;
       margin-bottom: 10px;
-      min-height: 60px;
+      min-height: 50px;
+      flex-wrap: wrap;
     }
 
     .titulo-nivel {
-      width: 45%;
+      flex: 1 1 45%;
       font-weight: bold;
       color: white;
-      font-size: 1rem;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
     }
 
     .dropzone {
-      width: 50%;
+      flex: 1 1 50%;
       min-height: 40px;
       background: white;
       border-radius: 6px;
       padding: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       text-align: center;
-      word-wrap: break-word;
     }
 
     .situacion {
-      background: rgb(0, 0, 0);
-      color: rgb(255, 255, 255);
-      padding: 8px 12px;
+      background: black;
+      color: white;
+      padding: 8px;
       border-radius: 6px;
-      font-weight: normal;
-      cursor: move;
       font-size: 1rem;
+      cursor: move;
       margin: 10px auto;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-      width: 280px;
-      max-width: 100%;
+      width: 90%;
       text-align: center;
       user-select: none;
-      position: relative;
-      touch-action: none; /* Para evitar scroll mientras arrastra */
+      touch-action: none;
     }
 
     .botones {
-      margin-top: 1.5rem;
+      margin: 1rem auto 2rem;
       display: flex;
-      gap: 10px;
       flex-wrap: wrap;
+      gap: 10px;
       justify-content: center;
+      max-width: 400px;
     }
 
     button {
-      padding: 10px 16px;
+      padding: 10px;
       font-size: 1rem;
       border: none;
       border-radius: 8px;
-      cursor: pointer;
       background-color: #1f4aa3;
       color: white;
-      min-width: 130px;
-      transition: background-color 0.3s ease;
-      white-space: nowrap;
-      box-sizing: border-box;
+      min-width: 140px;
+      flex: 1 1 45%;
+      max-width: 180px;
     }
 
-    button:hover {
-      background-color: #16367a;
-    }
-
-    /* Botón Argentinos a juzgar */
     .btn-juzgar {
       background: linear-gradient(45deg, #0026ff, #1fffe1, #2986ff);
       background-size: 200% 200%;
       animation: gradientShift 3s ease infinite;
       color: #fff;
-      font-weight: 900;
-      font-size: 1.3rem;
-      padding: 12px 24px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      padding: 14px;
       border-radius: 12px;
-      box-shadow: 0 0 15px #000000, 0 0 30px #ff0044;
-      border: none;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 1.3px;
-      transition: box-shadow 0.3s ease;
-      width: auto;
-      min-width: 220px;
-      text-align: center;
-    }
-
-    .btn-juzgar:hover {
-      box-shadow: 0 0 25px #ff6699, 0 0 40px #ff0055;
+      box-shadow: 0 0 10px #000000, 0 0 15px #ff0044;
+      flex: 1 1 100%;
+      max-width: 100%;
     }
 
     @keyframes gradientShift {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
-    /* MEDIA QUERIES para pantallas pequeñas (celulares) */
     @media (max-width: 480px) {
-      #juzgometro {
-        width: 95%;
-        padding: 1.8rem 1rem;
-      }
-
-      h1 {
-        font-size: 3rem;
-      }
-
-      .nivel {
-        flex-direction: column;
-        align-items: flex-start;
-        min-height: auto;
-        padding: 12px 10px;
-      }
-
       .titulo-nivel {
-        width: 100%;
-        font-size: 1.3rem;
-        margin-bottom: 6px;
+        font-size: 1rem;
       }
 
       .dropzone {
-        width: 100%;
-        min-height: 60px;
-        font-size: 1.1rem;
-        padding: 8px;
+        font-size: 1rem;
+        min-height: 50px;
       }
 
       .situacion {
-        font-size: 1.4rem;
-        width: 100%;
-        max-width: 100%;
-        margin: 14px 0;
-      }
-
-      .botones {
-        gap: 12px;
+        font-size: 1.1rem;
       }
 
       button {
-        font-size: 1.5rem;
-        min-width: 100%;
-        padding: 18px 0;
-      }
-
-      .btn-juzgar {
-        font-size: 1.8rem;
-        min-width: 100%;
-        padding: 20px 0;
-      }
-
-      /* Aumento general para celulares */
-      html {
-        zoom: 1.3;
+        font-size: 1.1rem;
       }
     }
   </style>
@@ -223,40 +156,13 @@
   <div id="juzgometro">
     <h1>JUZGÓMETRO</h1>
 
-    <div class="nivel" style="background:#e53935">
-      <div class="titulo-nivel">ARDERÁS EN EL INFIERNO</div>
-      <div class="dropzone"></div>
-    </div>
-
-    <div class="nivel" style="background:#fb8c00">
-      <div class="titulo-nivel">A LA GUILLOTINA</div>
-      <div class="dropzone"></div>
-    </div>
-
-    <div class="nivel" style="background:#fdd835; color:#000">
-      <div class="titulo-nivel">MARCHE PRESO</div>
-      <div class="dropzone"></div>
-    </div>
-
-    <div class="nivel" style="background:#66bb6a">
-      <div class="titulo-nivel">VA A PROBATION</div>
-      <div class="dropzone"></div>
-    </div>
-
-    <div class="nivel" style="background:#29b6f6">
-      <div class="titulo-nivel">OJOS QUE NO VEN</div>
-      <div class="dropzone"></div>
-    </div>
-
-    <div class="nivel" style="background:#ab47bc">
-      <div class="titulo-nivel">PEQUEÑO DESLIZ</div>
-      <div class="dropzone"></div>
-    </div>
-
-    <div class="nivel" style="background:#ff17a6">
-      <div class="titulo-nivel">QUIEN ESTÉ LIBRE DE PECADO...</div>
-      <div class="dropzone"></div>
-    </div>
+    <div class="nivel" style="background:#e53935"><div class="titulo-nivel">ARDERÁS EN EL INFIERNO</div><div class="dropzone"></div></div>
+    <div class="nivel" style="background:#fb8c00"><div class="titulo-nivel">A LA GUILLOTINA</div><div class="dropzone"></div></div>
+    <div class="nivel" style="background:#fdd835; color:#000"><div class="titulo-nivel">MARCHE PRESO</div><div class="dropzone"></div></div>
+    <div class="nivel" style="background:#66bb6a"><div class="titulo-nivel">VA A PROBATION</div><div class="dropzone"></div></div>
+    <div class="nivel" style="background:#29b6f6"><div class="titulo-nivel">OJOS QUE NO VEN</div><div class="dropzone"></div></div>
+    <div class="nivel" style="background:#ab47bc"><div class="titulo-nivel">PEQUEÑO DESLIZ</div><div class="dropzone"></div></div>
+    <div class="nivel" style="background:#ff17a6"><div class="titulo-nivel">QUIEN ESTÉ LIBRE DE PECADO...</div><div class="dropzone"></div></div>
   </div>
 
   <div id="contenedor-situaciones"></div>
@@ -270,18 +176,11 @@
 
   <script>
     const situaciones = [
-      "Gritar en el cine",
-      "Hablar con audios de 5 minutos",
-      "Leer el chat de tu pareja sin permiso",
-      "Hacerse el dormido para no ceder el asiento",
-      "Robarse un caramelo del súper",
-      "Comerse el último pedazo sin avisar",
-      "Pedir comida y no pagarla",
-      "Spoilear el final de una serie",
-      "Estornudar sin taparse",
-      "Abrir un paquete en el súper antes de pagarlo",
-      "Tirar basura por la ventana",
-      "Hacer ghosting"
+      "Gritar en el cine", "Hablar con audios de 5 minutos", "Leer el chat de tu pareja sin permiso",
+      "Hacerse el dormido para no ceder el asiento", "Robarse un caramelo del súper",
+      "Comerse el último pedazo sin avisar", "Pedir comida y no pagarla", "Spoilear el final de una serie",
+      "Estornudar sin taparse", "Abrir un paquete en el súper antes de pagarlo",
+      "Tirar basura por la ventana", "Hacer ghosting"
     ];
 
     const situacionesContenedor = document.getElementById('contenedor-situaciones');
@@ -292,17 +191,13 @@
       const el = document.createElement('div');
       el.className = 'situacion';
       el.textContent = texto;
-      el.style.position = 'relative';
-      el.style.zIndex = 1000;
 
-      // MOUSE DRAG para desktop
       el.draggable = true;
       el.addEventListener('dragstart', (e) => {
         e.dataTransfer.setData('text/plain', el.textContent);
         setTimeout(() => el.remove(), 0);
       });
 
-      // TOUCH DRAG para móviles
       let offsetX, offsetY;
       let currentDropzone = null;
 
@@ -322,16 +217,12 @@
         const touch = e.touches[0];
         el.style.left = `${touch.clientX - offsetX}px`;
         el.style.top = `${touch.clientY - offsetY}px`;
-
-        // Detectar si está sobre alguna dropzone
         currentDropzone = null;
         dropzones.forEach(zone => {
           const zoneRect = zone.getBoundingClientRect();
           if (
-            touch.clientX > zoneRect.left &&
-            touch.clientX < zoneRect.right &&
-            touch.clientY > zoneRect.top &&
-            touch.clientY < zoneRect.bottom
+            touch.clientX > zoneRect.left && touch.clientX < zoneRect.right &&
+            touch.clientY > zoneRect.top && touch.clientY < zoneRect.bottom
           ) {
             currentDropzone = zone;
             zone.style.outline = "3px dashed #1f4aa3";
@@ -339,7 +230,6 @@
             zone.style.outline = "none";
           }
         });
-
         e.preventDefault();
       }, { passive: false });
 
@@ -348,23 +238,17 @@
         el.style.left = '0';
         el.style.top = '0';
         el.style.zIndex = 'auto';
-
         if (currentDropzone) {
           currentDropzone.textContent = el.textContent;
           currentDropzone.style.outline = "none";
           el.remove();
-        } else {
-          el.style.position = 'relative';
-          el.style.zIndex = 'auto';
         }
-
         e.preventDefault();
       }, { passive: false });
 
       situacionesContenedor.appendChild(el);
     }
 
-    // Eventos drag & drop desktop (para dropzones)
     dropzones.forEach(zone => {
       zone.addEventListener('dragover', e => e.preventDefault());
       zone.addEventListener('drop', e => {
