@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Agregar Situaciones</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      position: relative;
+      min-height: 100vh;
+      background-image: url('fondo.png');
+      background-repeat: repeat;
+      background-size: auto;
+      /* Para la transparencia del fondo, usaremos un overlay */
+    }
+
+    /* Overlay semitransparente para oscurecer el fondo */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.5); /* 50% negro transparente */
+      z-index: -1;
+    }
+
+    main {
+      max-width: 640px;
+      margin: 2rem auto;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+      border-radius: 8px;
+    }
+
+    button {
+      margin-top: 1rem;
+      padding: 10px 16px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #1f4aa3;
+      color: white;
+      width: 140px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #16367a;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1 style="text-align:center; color:#1f4aa3;">Agregar Situaciones</h1>
+
+    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdGJ91FUjfNnSG_CY4aeDAZpAs_LQ0QQ97w8Kiq-P_F3_J7gA/viewform?embedded=true" 
+      allowfullscreen
+      ></iframe>
+
+    <button onclick="window.location.href='index.html'">Volver al inicio</button>
+  </main>
+</body>
+</html>

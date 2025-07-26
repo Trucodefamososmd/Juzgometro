@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Juzgómetro</title>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('fondo.png');
+      background-repeat: repeat;
+      background-size: auto;
+      opacity: 0.5;
+      z-index: -1;
+    }
+
+    #juzgometro {
+      background: #1f4aa3;
+      padding: 1rem;
+      border-radius: 12px;
+      width: 320px;
+      margin: 2rem auto;
+    }
+
+    h1 {
+      color: white;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .nivel {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+      min-height: 60px;
+    }
+
+    .titulo-nivel {
+      width: 45%;
+      font-weight: bold;
+      color: white;
+      font-size: 0.9rem;
+    }
+
+    .dropzone {
+      width: 50%;
+      min-height: 40px;
+      background: white;
+      border-radius: 6px;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      text-align: center;
+    }
+
+    .situacion {
+      background: rgb(0, 0, 0);
+      color: rgb(255, 255, 255);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-weight: normal;
+      cursor: move;
+      font-size: 0.9rem;
+      margin: 10px auto;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+      width: 280px;
+      text-align: center;
+    }
+
+    .botones {
+      margin-top: 1rem;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    button {
+      padding: 10px 16px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #1f4aa3;
+      color: white;
+      width: 130px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #16367a;
+    }
+
+    /* Botón Argentinos a juzgar mucho más llamativo */
+    .btn-juzgar {
+      background: linear-gradient(45deg, #ff0044, #ff77aa, #ff0044);
+      background-size: 200% 200%;
+      animation: gradientShift 3s ease infinite;
+      color: #fff;
+      font-weight: 900;
+      font-size: 1.2rem;
+      width: 180px;
+      padding: 14px 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #ff4d88, 0 0 30px #ff0044;
+      border: none;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .btn-juzgar:hover {
+      box-shadow: 0 0 25px #ff6699, 0 0 40px #ff0055;
+    }
+
+    @keyframes gradientShift {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="juzgometro">
+    <h1>JUZGÓMETRO</h1>
+
+    <div class="nivel" style="background:#e53935">
+      <div class="titulo-nivel">ARDERÁS EN EL INFIERNO</div>
+      <div class="dropzone"></div>
+    </div>
+
+    <div class="nivel" style="background:#fb8c00">
+      <div class="titulo-nivel">A LA GUILLOTINA</div>
+      <div class="dropzone"></div>
+    </div>
+
+    <div class="nivel" style="background:#fdd835; color:#000">
+      <div class="titulo-nivel">MARCHE PRESO</div>
+      <div class="dropzone"></div>
+    </div>
+
+    <div class="nivel" style="background:#66bb6a">
+      <div class="titulo-nivel">VA A PROBATION</div>
+      <div class="dropzone"></div>
+    </div>
+
+    <div class="nivel" style="background:#29b6f6">
+      <div class="titulo-nivel">OJOS QUE NO VEN</div>
+      <div class="dropzone"></div>
+    </div>
+
+    <div class="nivel" style="background:#ab47bc">
+      <div class="titulo-nivel">PEQUEÑO DESLIZ</div>
+      <div class="dropzone"></div>
+    </div>
+
+    <div class="nivel" style="background:#ff17a6">
+      <div class="titulo-nivel">QUIEN ESTÉ LIBRE DE PECADO...</div>
+      <div class="dropzone"></div>
+    </div>
+  </div>
+
+  <div class="botones">
+    <button class="btn-juzgar" onclick="agregarSituacion()">Argentinos... a juzgar</button>
+    <button onclick="descargarImagen()">Descargar</button>
+    <button onclick="reiniciar()">Reiniciar</button>
+    <button onclick="window.location.href='agrega.html'">Agregar situaciones</button>
+  </div>
+
+  <script>
+    const situaciones = [
+      "Gritar en el cine",
+      "Hablar con audios de 5 minutos",
+      "Leer el chat de tu pareja sin permiso",
+      "Hacerse el dormido para no ceder el asiento",
+      "Robarse un caramelo del súper",
+      "Comerse el último pedazo sin avisar",
+      "Pedir comida y no pagarla",
+      "Spoilear el final de una serie",
+      "Estornudar sin taparse",
+      "Abrir un paquete en el súper antes de pagarlo",
+      "Tirar basura por la ventana",
+      "Hacer ghosting"
+    ];
+
+    function agregarSituacion() {
+      const texto = situaciones[Math.floor(Math.random() * situaciones.length)];
+      const el = document.createElement('div');
+      el.className = 'situacion';
+      el.draggable = true;
+      el.textContent = texto;
+      el.addEventListener('dragstart', (e) => {
+        e.dataTransfer.setData('text/plain', el.textContent);
+        setTimeout(() => el.remove(), 0);
+      });
+      document.body.appendChild(el);
+    }
+
+    document.querySelectorAll('.dropzone').forEach(zone => {
+      zone.addEventListener('dragover', e => e.preventDefault());
+      zone.addEventListener('drop', e => {
+        e.preventDefault();
+        const data = e.dataTransfer.getData('text/plain');
+        zone.textContent = data;
+      });
+    });
+
+    function descargarImagen() {
+      html2canvas(document.querySelector("#juzgometro")).then(canvas => {
+        const a = document.createElement("a");
+        a.href = canvas.toDataURL("image/png");
+        a.download = "juzgometro.png";
+        a.click();
+      });
+    }
+
+    function reiniciar() {
+      document.querySelectorAll(".dropzone").forEach(z => z.innerHTML = '');
+      document.querySelectorAll(".situacion").forEach(s => s.remove());
+    }
+  </script>
+</body>
+</html>
