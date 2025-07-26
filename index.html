@@ -110,23 +110,26 @@
       background-color: #16367a;
     }
 
-    /* Botón Argentinos a juzgar mucho más llamativo */
+    /* Botón Argentinos a juzgar ajustado */
     .btn-juzgar {
-      background: linear-gradient(45deg, #ff0044, #ff77aa, #ff0044);
+      background: linear-gradient(45deg, #0026ff, #1fffe1, #2986ff);
       background-size: 200% 200%;
       animation: gradientShift 3s ease infinite;
       color: #fff;
       font-weight: 900;
-      font-size: 1.2rem;
-      width: 180px;
-      padding: 14px 20px;
+      font-size: 1.3rem;
+      padding: 14px 28px;
       border-radius: 12px;
-      box-shadow: 0 0 15px #ff4d88, 0 0 30px #ff0044;
+      box-shadow: 0 0 15px #000000, 0 0 30px #ff0044;
       border: none;
       cursor: pointer;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
+      letter-spacing: 1.3px;
       transition: box-shadow 0.3s ease;
+      white-space: nowrap;
+      width: auto;
+      min-width: 220px;
+      text-align: center;
     }
 
     .btn-juzgar:hover {
@@ -187,6 +190,8 @@
     </div>
   </div>
 
+  <div id="contenedor-situaciones"></div>
+
   <div class="botones">
     <button class="btn-juzgar" onclick="agregarSituacion()">Argentinos... a juzgar</button>
     <button onclick="descargarImagen()">Descargar</button>
@@ -220,7 +225,7 @@
         e.dataTransfer.setData('text/plain', el.textContent);
         setTimeout(() => el.remove(), 0);
       });
-      document.body.appendChild(el);
+      document.getElementById('contenedor-situaciones').appendChild(el);
     }
 
     document.querySelectorAll('.dropzone').forEach(zone => {
