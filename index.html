@@ -27,18 +27,21 @@
       z-index: -1;
     }
 
+    /* ESTILOS PARA DESKTOP (pantalla grande) */
     #juzgometro {
       background: #1f4aa3;
       padding: 1rem;
       border-radius: 12px;
-      width: 320px;
+      width: 360px;
       margin: 2rem auto;
+      box-sizing: border-box;
     }
 
     h1 {
       color: white;
       text-align: center;
       margin-bottom: 1rem;
+      font-size: 2rem;
     }
 
     .nivel {
@@ -47,7 +50,7 @@
       align-items: center;
       background: #ccc;
       border-radius: 8px;
-      padding: 10px;
+      padding: 10px 12px;
       margin-bottom: 10px;
       min-height: 60px;
     }
@@ -56,7 +59,7 @@
       width: 45%;
       font-weight: bold;
       color: white;
-      font-size: 0.9rem;
+      font-size: 1rem;
     }
 
     .dropzone {
@@ -68,26 +71,31 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       text-align: center;
+      word-wrap: break-word;
     }
 
     .situacion {
       background: rgb(0, 0, 0);
       color: rgb(255, 255, 255);
-      padding: 6px 10px;
+      padding: 8px 12px;
       border-radius: 6px;
       font-weight: normal;
       cursor: move;
-      font-size: 0.9rem;
+      font-size: 1rem;
       margin: 10px auto;
       box-shadow: 0 1px 4px rgba(0,0,0,0.2);
       width: 280px;
+      max-width: 100%;
       text-align: center;
+      user-select: none;
+      position: relative;
+      touch-action: none; /* Para evitar scroll mientras arrastra */
     }
 
     .botones {
-      margin-top: 1rem;
+      margin-top: 1.5rem;
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
@@ -102,15 +110,17 @@
       cursor: pointer;
       background-color: #1f4aa3;
       color: white;
-      width: 130px;
+      min-width: 130px;
       transition: background-color 0.3s ease;
+      white-space: nowrap;
+      box-sizing: border-box;
     }
 
     button:hover {
       background-color: #16367a;
     }
 
-    /* Botón Argentinos a juzgar ajustado */
+    /* Botón Argentinos a juzgar */
     .btn-juzgar {
       background: linear-gradient(45deg, #0026ff, #1fffe1, #2986ff);
       background-size: 200% 200%;
@@ -118,7 +128,7 @@
       color: #fff;
       font-weight: 900;
       font-size: 1.3rem;
-      padding: 14px 28px;
+      padding: 12px 24px;
       border-radius: 12px;
       box-shadow: 0 0 15px #000000, 0 0 30px #ff0044;
       border: none;
@@ -126,7 +136,6 @@
       text-transform: uppercase;
       letter-spacing: 1.3px;
       transition: box-shadow 0.3s ease;
-      white-space: nowrap;
       width: auto;
       min-width: 220px;
       text-align: center;
@@ -145,6 +154,61 @@
       }
       100% {
         background-position: 0% 50%;
+      }
+    }
+
+    /* MEDIA QUERIES para pantallas pequeñas (celulares) */
+    @media (max-width: 480px) {
+      #juzgometro {
+        width: 95%;
+        padding: 1.8rem 1rem;
+      }
+
+      h1 {
+        font-size: 3rem;
+      }
+
+      .nivel {
+        flex-direction: column;
+        align-items: flex-start;
+        min-height: auto;
+        padding: 12px 10px;
+      }
+
+      .titulo-nivel {
+        width: 100%;
+        font-size: 1.3rem;
+        margin-bottom: 6px;
+      }
+
+      .dropzone {
+        width: 100%;
+        min-height: 60px;
+        font-size: 1.1rem;
+        padding: 8px;
+      }
+
+      .situacion {
+        font-size: 1.4rem;
+        width: 100%;
+        max-width: 100%;
+        margin: 14px 0;
+      }
+
+      .botones {
+        gap: 12px;
+      }
+
+      button {
+        font-size: 1.5rem;
+        min-width: 100%;
+        padding: 18px 0;
+      }
+
+      .btn-juzgar {
+        font-size: 1.8rem;
+        min-width: 100%;
+        padding: 20px 0;
       }
     }
   </style>
@@ -215,20 +279,88 @@
       "Hacer ghosting"
     ];
 
+    const situacionesContenedor = document.getElementById('contenedor-situaciones');
+    const dropzones = document.querySelectorAll('.dropzone');
+
     function agregarSituacion() {
       const texto = situaciones[Math.floor(Math.random() * situaciones.length)];
       const el = document.createElement('div');
       el.className = 'situacion';
-      el.draggable = true;
       el.textContent = texto;
+      el.style.position = 'relative';
+      el.style.zIndex = 1000;
+
+      // MOUSE DRAG para desktop
+      el.draggable = true;
       el.addEventListener('dragstart', (e) => {
         e.dataTransfer.setData('text/plain', el.textContent);
         setTimeout(() => el.remove(), 0);
       });
-      document.getElementById('contenedor-situaciones').appendChild(el);
+
+      // TOUCH DRAG para móviles
+      let offsetX, offsetY;
+      let currentDropzone = null;
+
+      el.addEventListener('touchstart', (e) => {
+        const touch = e.touches[0];
+        const rect = el.getBoundingClientRect();
+        offsetX = touch.clientX - rect.left;
+        offsetY = touch.clientY - rect.top;
+        el.style.position = 'fixed';
+        el.style.left = `${touch.clientX - offsetX}px`;
+        el.style.top = `${touch.clientY - offsetY}px`;
+        el.style.zIndex = 10000;
+        e.preventDefault();
+      }, { passive: false });
+
+      el.addEventListener('touchmove', (e) => {
+        const touch = e.touches[0];
+        el.style.left = `${touch.clientX - offsetX}px`;
+        el.style.top = `${touch.clientY - offsetY}px`;
+
+        // Detectar si está sobre alguna dropzone
+        currentDropzone = null;
+        dropzones.forEach(zone => {
+          const zoneRect = zone.getBoundingClientRect();
+          if (
+            touch.clientX > zoneRect.left &&
+            touch.clientX < zoneRect.right &&
+            touch.clientY > zoneRect.top &&
+            touch.clientY < zoneRect.bottom
+          ) {
+            currentDropzone = zone;
+            zone.style.outline = "3px dashed #1f4aa3";
+          } else {
+            zone.style.outline = "none";
+          }
+        });
+
+        e.preventDefault();
+      }, { passive: false });
+
+      el.addEventListener('touchend', (e) => {
+        el.style.position = 'relative';
+        el.style.left = '0';
+        el.style.top = '0';
+        el.style.zIndex = 'auto';
+
+        if (currentDropzone) {
+          currentDropzone.textContent = el.textContent;
+          currentDropzone.style.outline = "none";
+          el.remove();
+        } else {
+          el.style.position = 'relative';
+          el.style.zIndex = 'auto';
+        }
+
+        e.preventDefault();
+      }, { passive: false });
+
+      situacionesContenedor.appendChild(el);
     }
 
-    document.querySelectorAll('.dropzone').forEach(zone => {
+    // Eventos drag & drop desktop (para dropzones)
+    dropzones.forEach(zone => {
       zone.addEventListener('dragover', e => e.preventDefault());
       zone.addEventListener('drop', e => {
         e.preventDefault();
