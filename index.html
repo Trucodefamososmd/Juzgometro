@@ -74,6 +74,11 @@
       text-align: center;
     }
 
+    .dropzone.ocupado {
+      background-color: #ccc;
+      pointer-events: none;
+    }
+
     .situacion {
       background: black;
       color: white;
@@ -169,7 +174,6 @@
     ];
 
     let situaciones = [...todasLasSituaciones];
-
     const situacionesContenedor = document.getElementById('contenedor-situaciones');
     const dropzones = document.querySelectorAll('.dropzone');
 
@@ -223,6 +227,7 @@
         dropzones.forEach(zone => {
           const zoneRect = zone.getBoundingClientRect();
           if (
+            !zone.classList.contains('ocupado') &&
             touch.clientX > zoneRect.left && touch.clientX < zoneRect.right &&
             touch.clientY > zoneRect.top && touch.clientY < zoneRect.bottom
           ) {
@@ -242,6 +247,7 @@
         el.style.zIndex = 'auto';
         if (currentDropzone) {
           currentDropzone.textContent = el.textContent;
+          currentDropzone.classList.add('ocupado');
           currentDropzone.style.outline = "none";
           el.remove();
           document.getElementById('btnAgregar').disabled = false;
@@ -253,11 +259,19 @@
     }
 
     dropzones.forEach(zone => {
-      zone.addEventListener('dragover', e => e.preventDefault());
+      zone.addEventListener('dragover', e => {
+        if (!zone.classList.contains('ocupado')) e.preventDefault();
+      });
+
       zone.addEventListener('drop', e => {
         e.preventDefault();
+        if (zone.classList.contains('ocupado')) {
+          alert("Esa categoría ya fue usada.");
+          return;
+        }
         const data = e.dataTransfer.getData('text/plain');
         zone.textContent = data;
+        zone.classList.add('ocupado');
         document.getElementById('btnAgregar').disabled = false;
       });
     });
@@ -272,7 +286,10 @@
     }
 
     function reiniciar() {
-      document.querySelectorAll(".dropzone").forEach(z => z.innerHTML = '');
+      document.querySelectorAll(".dropzone").forEach(z => {
+        z.innerHTML = '';
+        z.classList.remove('ocupado');
+      });
       document.querySelectorAll(".situacion").forEach(s => s.remove());
       situaciones = [...todasLasSituaciones];
       document.getElementById('btnAgregar').disabled = false;
